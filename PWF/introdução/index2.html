@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <h1 id="paragrafomeu"> texto 2</h1>
+    <p id="meuparagrafo">Este é um paragrafo</p>
+    
+    <script>
+        document.getElementById("meuparagrafo").innerHTML  = "o conteúdo foi alterado!";
+        var novoconteudo = document.getElementById("paragrafomeu").innerHTML
+        document.write("<p>Novo conteúdo:" + novoconteudo + "</p>")
+    </script>
+</body>
+</html>

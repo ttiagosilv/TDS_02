@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações do Endereço</title>
+</head>
+<body>
+    <h1>Informações do Endereço</h1>
+    
+    <p id="info1">Rua: Avenida Paulista, 1578</p>
+    <p id="info2">Bairro: Bela Vista</p>
+    <p id="info3">Cidade: São Paulo</p>
+    <p id="info4">Estado: SP</p>
+    <p id="info5">CEP: 01310-200</p>
+    
+    <p id="resultado"></p>
+
+    <script>
+        const info1 = document.getElementById('info1').innerHTML;
+        const info2 = document.getElementById('info2').innerHTML;
+        const info3 = document.getElementById('info3').innerHTML;
+        const info4 = document.getElementById('info4').innerHTML;
+        const info5 = document.getElementById('info5').innerHTML;
+
+        document.getElementById('resultado').innerHTML = `${info1}, ${info2}, ${info3}, ${info4}, ${info5}`;
+    </script>
+</body>
+</html>

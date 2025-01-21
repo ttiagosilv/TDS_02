@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APIs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .api-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .api-title {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .endpoint {
+            background-color: #f7f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .endpoint input, .endpoint textarea {
+            width: 100%;
+            margin: 5px 0;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .endpoint button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px 0;
+        }
+        
+        .endpoint button:hover {
+            background-color: #2980b9;
+        }
+        
+        #weather-result, #json-result, #nasa-result {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        
+        table {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pesquisa de APIs Públicas</h1>
+
+    <div class="api-card">
+        <h2 class="api-title">1. NASA FIRMS API</h2>
+        <p><strong>Descrição:</strong> API que fornece dados sobre focos de incêndio detectados por satélite no Brasil.</p>
+        <p><strong>Requer API Key:</strong> Sim</p>
+        <p><strong>Métodos HTTP:</strong> GET</p>
+        <div class="endpoint">
+            <p>Teste a API:</p>
+            <button onclick="testFIRMS()">Buscar Focos de Incêndio</button>
+            <div id="firms-result"></div>
+        </div>
+    </div>
+
+    <div class="api-card">
+        <h2 class="api-title">2. Google Gemini 2.0 Flash</h2>
+        <p><strong>Descrição:</strong> API de IA Generativa do Google para geração de texto.</p>
+        <p><strong>Requer API Key:</strong> Sim</p>
+        <p><strong>Método HTTP:</strong> POST</p>
+        <div class="endpoint">
+            <p>Teste a API:</p>
+            <textarea 
+                id="prompt-input" 
+                placeholder="Digite seu prompt aqui... (ex: 'Escreva uma história curta sobre um robô que aprende a sonhar')" 
+                style="width: 100%; height: 100px; padding: 10px; margin-bottom: 10px; border-radius: 4px; border: 1px solid #ddd;"
+            ></textarea>
+            <button onclick="generateWithGemini()">Gerar Texto</button>
+            <div id="gemini-result" class="result-container"></div>
+        </div>
+    </div>
+
+    <div class="api-card">
+        <h2 class="api-title">3. NASA API</h2>
+        <p><strong>Descrição:</strong> API que fornece acesso a dados da NASA, incluindo imagens astronômicas e dados de Marte.</p>
+        <p><strong>Requer API Key:</strong> Sim</p>
+        <p><strong>Métodos HTTP:</strong> GET</p>
+        <div class="endpoint">
+            <p>Teste a API:</p>
+            <button onclick="testNASA()">Ver Dados do Dia</button>
+            <div id="nasa-result"></div>
+        </div>
+    </div>
+    <script>
+        const API_KEYS = {
+            firms: '349b9a169b4c26424435554a61bdf7d6',
+            nasa: 'deo8Bp6oLNwkmvQrGNfRAv0lg0WwCYsmCK7pEtXY'
+        };
+
+        async function testFIRMS() {
+            try {
+                const today = new Date().toISOString().split('T')[0];
+                const response = await fetch(`https://firms.modaps.eosdis.nasa.gov/api/country/csv/${API_KEYS.firms}/VIIRS_SNPP_NRT/BRA/1/${today}`);
+                const data = await response.text();
+                
+                const rows = data.split('\n');
+                const headers = rows[0].split(',');
+                const fireData = rows.slice(1, 11).map(row => {
+                    const values = row.split(',');
+                    return headers.reduce((obj, header, index) => {
+                        obj[header] = values[index];
+                        return obj;
+                    }, {});
+                });
+
+                const tableHTML = `
+                    <table border="1" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th>Latitude</th>
+                                <th>Longitude</th>
+                                <th>Data</th>
+                                <th>Hora</th>
+                                <th>Confiança</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${fireData.map(fire => `
+                                <tr>
+                                    <td>${fire.latitude}</td>
+                                    <td>${fire.longitude}</td>
+                                    <td>${fire.acq_date}</td>
+                                    <td>${fire.acq_time}</td>
+                                    <td>${fire.confidence}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    <p>Mostrando os 10 primeiros focos de incêndio detectados no Brasil hoje.</p>
+                `;
+
+                document.getElementById('firms-result').innerHTML = tableHTML;
+            } catch (error) {
+                document.getElementById('firms-result').innerHTML = `Erro: ${error.message}`;
+            }
+        }
+
+        async function generateWithGemini() {
+            const resultDiv = document.getElementById('gemini-result');
+            const prompt = document.getElementById('prompt-input').value;
+
+            if (!prompt.trim()) {
+                resultDiv.innerHTML = '<div class="error-message">Por favor, digite um prompt antes de gerar.</div>';
+                return;
+            }
+
+            resultDiv.innerHTML = '<div class="loading">Gerando texto com IA...</div>';
+
+            try {
+                const response = await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-goog-api-key': 'AIzaSyCj1qS76FmwuGvZIrr3P__HFD-z7HotsQ4'
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: prompt
+                            }]
+                        }],
+                        generationConfig: {
+                            temperature: 0.7,
+                            topK: 40,
+                            topP: 0.8,
+                            maxOutputTokens: 1024,
+                        }
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Falha na comunicação com a API');
+                }
+
+                const data = await response.json();
+                
+                if (!data.candidates || data.candidates.length === 0) {
+                    throw new Error('Não foi possível gerar o texto');
+                }
+
+                const generatedText = data.candidates[0].content.parts[0].text;
+                resultDiv.innerHTML = `
+                    <div style="margin-top: 20px;">
+                        <h3>Texto Gerado:</h3>
+                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 4px; white-space: pre-wrap; line-height: 1.5;">
+                            ${generatedText}
+                        </div>
+                        <p style="color: #666; margin-top: 10px; font-size: 0.9em;">
+                            Gerado em: ${new Date().toLocaleString()}
+                        </p>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error-message">
+                        <p>Erro: ${error.message}</p>
+                        <p style="font-size: 0.9em;">Por favor, tente novamente em alguns instantes.</p>
+                    </div>
+                `;
+            }
+        }
+
+        async function testNASA() {
+            try {
+                const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEYS.nasa}`);
+                const data = await response.json();
+                document.getElementById('nasa-result').innerHTML = `
+                    <h3>${data.title}</h3>
+                    <img src="${data.url}" alt="${data.title}" style="max-width: 100%;">
+                    <p>${data.explanation}</p>
+                `;
+            } catch (error) {
+                document.getElementById('nasa-result').innerHTML = `Erro: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

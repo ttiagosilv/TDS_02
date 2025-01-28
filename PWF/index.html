@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta APIs Públicas</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <div class="container">
+        <section class="github-section">
+            <h2>Busca de Usuários GitHub</h2>
+            <div class="input-group">
+                <input type="text" id="usuario" placeholder="Digite o nome do usuário">
+                <button onclick="buscarUsuarioGithub()">Buscar Usuário</button>
+            </div>
+            <div id="resultado-github"></div>
+        </section>
+
+        <section class="pokemon-section">
+            <h2>Busca de Personagens Dragon Ball</h2>
+            <div class="input-group">
+                <input type="text" id="pokemon" placeholder="Digite o nome do personagem">
+                <button onclick="buscarPersonagem()">Buscar Personagem</button>
+            </div>
+            <div id="resultado-pokemon"></div>
+        </section>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>

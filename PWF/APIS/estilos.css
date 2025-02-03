@@ -1,0 +1,164 @@
+:root {
+    --pri: #4f46e5;
+    --sec: #6b7280;
+    --txt: #111827;
+    --bg: #f3f4f6;
+    --branco: #fff;
+    --cinza: #f9fafb;
+    --borda: #e5e7eb;
+    --sombra: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+body {
+    background: var(--bg);
+    color: var(--txt);
+}
+
+.nav {
+    background: var(--pri) !important;
+    box-shadow: var(--sombra);
+}
+
+.titulo {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.principal {
+    margin-top: 2rem;
+}
+
+.posts {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.post {
+    background: var(--branco);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--sombra);
+    border: 1px solid var(--borda);
+    transition: .3s;
+}
+
+.post:hover {
+    transform: translateY(-4px);
+}
+
+.topo {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.foto {
+    width: 3rem;
+    height: 3rem;
+    border-radius: .75rem;
+    background: var(--pri);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--branco);
+    font-size: 1.25rem;
+}
+
+.info {
+    margin-left: 1rem;
+    flex: 1;
+}
+
+.nome {
+    font-weight: 600;
+    color: var(--txt);
+    font-size: 1.1rem;
+}
+
+.email {
+    color: var(--sec);
+    font-size: .875rem;
+}
+
+.data {
+    background: var(--cinza);
+    padding: .5rem 1rem;
+    border-radius: 1rem;
+    color: var(--sec);
+    font-size: .875rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.corpo {
+    margin-bottom: 1rem;
+}
+
+.titulo {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--txt);
+    margin-bottom: .75rem;
+}
+
+.texto {
+    color: var(--sec);
+    line-height: 1.6;
+}
+
+.acoes {
+    border-top: 1px solid var(--borda);
+    padding-top: 1rem;
+}
+
+.btn {
+    width: 100%;
+    border: none;
+    background: none;
+    padding: .75rem;
+    color: var(--sec);
+    font-size: .875rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    border-radius: .5rem;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.btn:hover {
+    background: var(--pri);
+    color: var(--branco);
+}
+
+.coment {
+    background: var(--cinza);
+    border-radius: .75rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.coment:last-child {
+    margin-bottom: 0;
+}
+
+.coment h6 {
+    font-weight: 600;
+    margin-bottom: .5rem;
+}
+
+.sec {
+    color: var(--sec);
+    font-size: .875rem;
+    margin-bottom: .75rem;
+}
+
+@media (max-width: 768px) {
+    .post {
+        margin: 1rem;
+    }
+}
